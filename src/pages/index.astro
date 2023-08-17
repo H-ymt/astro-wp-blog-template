@@ -3,6 +3,15 @@ import Layout from "../layouts/Layout.astro";
 
 const res = await fetch("http://astro-wp-blog.local/wp-json/wp/v2/posts");
 const posts = await res.json();
+
+const truncateTitle = (title) => {
+  const maxLength = 27;
+  if (title.length > maxLength) {
+    return title.slice(0, maxLength) + "...";
+  }
+
+  return title;
+};
 ---
 
 <Layout title="Astro - Wordpress">
@@ -15,7 +24,7 @@ const posts = await res.json();
       posts.map((post) => (
         <li class="text-fuchsia-50">
           <a href={post.id}>
-            <h2 class="text-2xl text-orange-100" set:html={post.title.rendered} />
+            <h2 class="text-2xl text-orange-100" set:html={truncateTitle(post.title.rendered)} />
             <p class="text-sm">{post.date.substring(0, 10)}</p>
             <div set:html={post.excerpt.rendered} />
           </a>
