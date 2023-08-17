@@ -1,0 +1,26 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+const res = await fetch("http://astro-wp-blog.local/wp-json/wp/v2/posts");
+const posts = await res.json();
+---
+
+<Layout title="Astro - Wordpress">
+  <h1 class="text-xl lg:text-3xl text-center text-orange-400">
+    WordpressをヘッドレスCMSとして<span class="inline-block">使用したAstroのWebサイト</span>
+  </h1>
+
+  <ul class="flex flex-col gap-8 max-w-2xl mx-auto py-12">
+    {
+      posts.map((post) => (
+        <li class="text-fuchsia-50">
+          <a href={post.id}>
+            <h2 class="text-2xl text-orange-100" set:html={post.title.rendered} />
+            <p class="text-sm">{post.date.substring(0, 10)}</p>
+            <div set:html={post.excerpt.rendered} />
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</Layout>
